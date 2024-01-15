@@ -1,0 +1,28 @@
+{
+  "name": "gym-star",
+  "version": "1.0.0",
+  "description": "Gym star to lose weight and get a perfect body",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m0hamedafifi/Gym-Star.git"
+  },
+  "keywords": [
+    "gym"
+  ],
+  "author": "Mohamed afifi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m0hamedafifi/Gym-Star/issues"
+  },
+  "homepage": "https://github.com/m0hamedafifi/Gym-Star#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.2"
+  }
+}

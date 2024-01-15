@@ -1,2 +1,2 @@
-# Gym-Ster
-Gym Ster Website to loss your weight and get perfect body
+# Gym-Star
+Gym Star Website to lose your weight and get a perfect body
