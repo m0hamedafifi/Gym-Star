@@ -21,8 +21,15 @@
   },
   "homepage": "https://github.com/m0hamedafifi/Gym-Star#readme",
   "dependencies": {
-    "dotenv": "^16.3.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "nodemon": "^3.0.2"
+    "moment": "^2.30.1",
+    "mongoose": "^8.1.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
