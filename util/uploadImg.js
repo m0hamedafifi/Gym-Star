@@ -2,6 +2,7 @@ var multer = require("multer");
 const path = require("path");
 const utility = require("./utility");
 
+let counter = 1;
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
@@ -10,7 +11,7 @@ var storage = multer.diskStorage({
     let ext = path.extname(file.originalname);
     cb(
       null,
-      file.fieldname + "-" + utility.dateFormat().replace(/[- :]/g, "_") + ext
+      (counter++)+"-"+file.fieldname + "-" + utility.dateFormat().replace(/[- :]/g, "_") + ext
     );
   },
 });

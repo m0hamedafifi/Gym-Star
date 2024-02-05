@@ -20,4 +20,5 @@ levels
 5. Progress Tracking: Ability to view daily progress towards weight loss and overall fitness goals
 6. Social Sharing: Share achievements and milestones on social media platforms
 7. Responsive Design: The website is fully responsive ensuring that all devices can
-access the content easily</s>
+access the content easily
+
