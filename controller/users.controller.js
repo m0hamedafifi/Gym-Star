@@ -74,7 +74,7 @@ exports.getAllUsersList = async function (req, res) {
     let limit = req.query.limit ? parseInt(req.query.limit) : 10;
     let skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
-    let sortBy = req.query.sort_by ? req.query.sort_by : "_id";
+    let sortBy = req.query.sort_by ? req.query.sort_by : "id";
     let sortType = req.query.sort_type ? req.query.sort_type : "desc";
 
     let searchKeyword = req.query.search ? req.query.search : "";
@@ -95,7 +95,7 @@ exports.getAllUsersList = async function (req, res) {
         recordPerPage: limit,
         currentPageNo: Math.ceil(skip / limit)+1 ,
         totalPages: Math.ceil(totalRecords/limit),
-        data:records
+        results:records
     })
 }catch(e){
     console.log("Error in getting user list..!");
