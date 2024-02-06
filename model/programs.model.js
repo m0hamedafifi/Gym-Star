@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 // create schema
 const imgSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  description:{type:String , default:""},
   originalname: { type: String, default: "" },
   path:{type:String , required: true},
 });

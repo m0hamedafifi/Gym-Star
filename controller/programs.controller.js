@@ -1,8 +1,7 @@
-const { name } = require("ejs");
 const Program = require("../model/programs.model");
-var fs = require("fs");
-var path = require("path");
-var appRoot = path.dirname(require.main.filename);
+// var fs = require("fs");
+// var path = require("path");
+// var appRoot = path.dirname(require.main.filename);
 
 // ----------------------------------------------------------------
 // Create a new program instance
@@ -75,14 +74,14 @@ exports.getAllPrograms = async (req, res) => {
     if (!data) {
       return res
         .status(404)
-        .json({ status: false, message: "No Data Found...!" });
+        .send({ status: false, message: "No Data Found...!" });
     }
-    return res.status(200).json({ status: true, results: data }); // return data to client-side
+    return res.status(200).send({ status: true, results: data }); // return data to client-side
   } catch (err) {
     console.error(`Server Error : ${err.message}`);
     return res
       .status(500)
-      .json({ status: false, message: "Internal Server Error...!" });
+      .send({ status: false, message: "Internal Server Error...!" });
   }
 };
 
