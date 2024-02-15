@@ -1,6 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv');
 const bodyParser = require("body-parser");
+const cors = require('cors');
 const dbConnection = require('./db/connection');
 const programRouter = require('./router/programs.route');
 // const userRouter = require('./router/users.route');
@@ -13,14 +14,14 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 // parse requests of content-type - application/json
-app.use(bodyParser.json())
-
-
+app.use(bodyParser.json());
+// enable all CORS requests
+app.use(cors());
 
 const port = process.env.PORT || 3000
 
 // Db connection
-dbConnection.run()
+dbConnection.run();
 
 app.get('/', (req, res) => res.send('Welcome to the Gym Star'))
 // routers

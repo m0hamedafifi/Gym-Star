@@ -11,7 +11,7 @@ const util = require('../util/utility');
 exports.createExercise = async (req, res) => {
   try {
     console.log("body.......",req.body);
-    console.log("files......",req.file);
+    console.log("files......",req.files);
     // save req body at new obj instance of Exercise model
     let newExercise = {
         programId: req.body.programId,
