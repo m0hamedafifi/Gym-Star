@@ -1,9 +1,7 @@
 var passwordValidator = require("password-validator");
 var passwordChecker = new passwordValidator();
 
-
 // Password must be 10 characters long
-
 
 module.exports.isValidPassword = (password) => {
   // Add properties to the password validator
@@ -23,10 +21,14 @@ module.exports.isValidPassword = (password) => {
     .oneOf(["Passw0rd", "Password123"]); // Blacklist these values
   try {
     // Validate the password against the passwordChecker
-    return passwordChecker.validate(password);
+    let result = passwordChecker.validate(password, { details: true });
+    if (result.length > 0) {
+      return result;
+    }
+    return true;
   } catch (err) {
-    console.log("Error at validation  password function : " + err);
-    throw err;
+    console.log("Error at validation  password : " + err);
+    return false;
   }
 };
 
@@ -50,10 +52,9 @@ exports.isValidUserName = (userName) => {
 };
 
 // length check for string
-exports.isValidLength =  (str)=>{
-    if(str.length < 3){
-        return false;
-    }
-    return true;
-}
-
+exports.isValidLength = (str) => {
+  if (str.length < 3) {
+    return false;
+  }
+  return true;
+};

@@ -14,6 +14,6 @@ const programSchema = new mongoose.Schema({
   images: [imgSchema],
   id: { type: Number, required: true, unique: true },
 });
-const Program = mongoose.model("programs", programSchema);
 // create model
+const Program = mongoose.model("programs", programSchema);
 module.exports = Program;
