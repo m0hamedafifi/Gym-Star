@@ -1,4 +1,11 @@
 const Program = require("../model/programs.model");
+
+const cloudinary = require("cloudinary").v2;
+
+
+// Log the configuration
+// console.log(cloudinary.config());
+
 // var fs = require("fs");
 // var path = require("path");
 // var appRoot = path.dirname(require.main.filename);
@@ -10,26 +17,35 @@ exports.addNewProgram = async (req, res) => {
   try {
     // get the latest id from the server's database and increment it by one for our new object
     let lastId = await Program.findOne().sort({ id: "desc" }).exec();
-    if (!lastId) lastId = 0;
+    if (!lastId) lastId = 1;
     else lastId = lastId.id + 1;
     req.body.id = lastId;
-    if (req.files.length > 0) {
-      var imgList = req.files.map((item) => ({
-        name: item.filename,
-        originalname: item.originalname,
-        path: "/uploads/" + item.filename,
-      }));
+    // console.log(req.files);
+
+    if (req.files !== undefined || req.files.length > 0) {
+      const uploadPromises = req.files.map(async (item) => {
+        // Use Cloudinary to upload images to their servers
+        let uploadedImage = await uploadImage(item.path);
+        return uploadedImage;
+      });
+
+      // Wait for all promises to resolve before proceeding
+      const uploadedImages = await Promise.all(uploadPromises);
+
+      // Add the array of uploaded image public IDs to req.body.imgUrls
+      req.body.imgUrls = uploadedImages//.map((image) => ({ path: image }));
+    } else {
+      console.log("No image uploaded");
+      return res
+        .status(487)
+        .send({ status: false, message: "Please upload an Image." });
     }
-    else
-    {
-      console.log('No image uploaded');
-      return res.status(487).send({status:false, message: 'Please upload an Image.' });
-    }
+    // send the new program object to the database
     let obj = {
       name: req.body.name,
       title: req.body.title,
       description: req.body.description,
-      images: imgList,
+      images: req.body.imgUrls,
       id: req.body.id,
     };
 
@@ -118,7 +134,7 @@ exports.updateProgram = async (req, res) => {
       return res.status(400).json({
         status: false,
         message: "Operation failed!",
-      }); 
+      });
     }
     return res.status(200).json({
       status: true,
@@ -152,16 +168,37 @@ exports.deleteProgram = async (req, res) => {
         status: false,
         message: "No record found with provided ID",
       });
-    } 
+    }
 
-      return res.status(200).json({
-        status: true,
-        data: data,
-        message: "Record deleted Successfully",
-      });
-    
+    return res.status(200).json({
+      status: true,
+      data: data,
+      message: "Record deleted Successfully",
+    });
   } catch (err) {
     console.error(err.message);
-    return res.status(500).send({status:false , message:"Internal Server Error...!"});
+    return res
+      .status(500)
+      .send({ status: false, message: "Internal Server Error...!" });
+  }
+};
+
+// upload a new image to cloud
+const uploadImage = async (imagePath) => {
+  // Use the uploaded file's name as the asset's public ID and
+  // allow overwriting the asset with new versions
+  const options = {
+    folder: "/ImagesGymStar/programs",
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  };
+
+  try {
+    // Upload the image
+    const result = await cloudinary.uploader.upload(imagePath, options);
+    return result.public_id + "." + result.format;
+  } catch (error) {
+    console.error(error);
   }
 };

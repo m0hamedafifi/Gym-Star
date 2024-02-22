@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const exerciseSchema = new mongoose.Schema({
   // this is the _id field by default in Mongoose, but we want to use our own custom ID
 
-  id: {
+  exerciseId: {
     type: Number,
     required: true,
     unique: true,
@@ -33,16 +33,14 @@ const exerciseSchema = new mongoose.Schema({
       required: true,
     },
   ],
-  // Array of tags for categorizing the workout
-  tags: [{ type: String }],
   // images
-  imgPath: {
+  imagePath: {
     type: String,
     required: true,
   },
-  duration: { type: Number, required: false },
+  duration: { type: String, required: false },
   createdOn: { type: Date, required: false, default: new Date() },
-  createdBy: { type: Number, required: true },
+  createdBy: { type: String, required: true },
 });
 // create Model
 

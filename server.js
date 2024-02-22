@@ -6,8 +6,17 @@ const dbConnection = require('./db/connection');
 const programRouter = require('./router/programs.route');
 // const userRouter = require('./router/users.route');
 const exerciseRouter = require('./router/exercises.route');
+// const fileUpload = require('express-fileupload');
+const cloudinary = require('cloudinary').v2;
 
 dotenv.config();
+// Return "https" URLs by setting secure: true
+cloudinary.config({
+    cloud_name: "dphrkslty",
+    api_key: "168239894649389",
+    api_secret: "7Pqk54H1qYAnIqYDO4I6-U68NOk",
+    secure: true,
+  });
 
 const app = express()
 
@@ -17,6 +26,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 // enable all CORS requests
 app.use(cors());
+
+// file upload 
+// app.use(fileUpload());
 
 const port = process.env.PORT || 3000
 

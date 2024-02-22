@@ -33,7 +33,7 @@ exports.addNewUser = async (req, res) => {
       gender: req.body.gender,
       userDisabled: false,
       verifiedUser: false,
-      createdBy: "postman",
+      createdBy: req.body.userName,
       createdOn: util.dateFormat(),
       //role
     };
@@ -206,6 +206,4 @@ exports.updateUserInfo = async function (req, res) {
   }
 };
 
-//----------------------------------------------------------------
-// Function for Getting all users list
-//----------------------------------------------------------------
+
