@@ -14,7 +14,7 @@ dotenv.config();
 // generate the access token for a user with specific role and expiration time
 //------------------------------------------------------------------------------
 exports.generateToken = (id,userName,role)=>{
-    return jwt.sign({id:id,userName:userName,role:role}, process.env.JWT_SECRET, {expiresIn: "7d"});
+    return jwt.sign({userId:id,userName:userName,role:role}, process.env.JWT_SECRET, {expiresIn: "7d"});
 }
 
 //------------------------------------------------------------------------------

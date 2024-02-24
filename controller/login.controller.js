@@ -15,7 +15,7 @@ const logger = new Logger("LoginController");
 exports.signInWithUsernamePassword = async (req, res) => {
     try{
         // Get the user from database by their username
-        const user = await User.findOne({userName: req.body.userName});
+        const user = await User.findOne({$or:[{userName: req.body.userName} , {email: req.body.userName}]});
         if(!user){
             logger.error("Couldn't find user with this username.",req.body.userName);
             return res.status(401).send({
@@ -40,7 +40,8 @@ exports.signInWithUsernamePassword = async (req, res) => {
         // send response to client side
         res.header('x-auth-token', token).status(200).send({
             status: true,
-            message:"User Logged In Successfully"
+            message:"User Logged In Successfully",
+            token:token
         })
       
     }catch(err){

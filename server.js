@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const dbConnection = require('./db/connection');
 const programRouter = require('./router/programs.route');
-// const userRouter = require('./router/users.route');
+const userRouter = require('./router/users.route');
 const exerciseRouter = require('./router/exercises.route');
 // const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary').v2;
@@ -39,6 +39,8 @@ app.get('/', (req, res) => res.send('Welcome to the Gym Star'))
 // routers
 app.use("/gym-star", programRouter);
 app.use("/gym-star", exerciseRouter);
+app.use("/gym-star", userRouter);
+
 
 // send back a 404 if no other route matches
 app.use((req, res) => {

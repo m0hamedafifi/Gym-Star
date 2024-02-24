@@ -3,10 +3,10 @@ const validator = require("../util/validations");
 // Exporting the validRegData middleware function which will validate the registration data
 exports.validRegData = async (req, res, next) => {
   try {
-    const { fname, lname, userName, Email, password } = req.body;
+    const { fname, lname, userName, email, password } = req.body;
 
     // Checking if any of the required fields are missing
-    if (!fname || !lname || !userName || !Email || !password) {
+    if (!fname || !lname || !userName || !email || !password) {
       return res
         .status(400)
         .send({ status: false, message: "Please fill all fields" });
@@ -39,7 +39,7 @@ exports.validRegData = async (req, res, next) => {
     }
 
     // email validation
-    if (!validator.isValidEmail(Email)) {
+    if (!validator.isValidEmail(email)) {
       return res.status(400).send({
         status: false,
         message: "You have entered an invalid email address!",

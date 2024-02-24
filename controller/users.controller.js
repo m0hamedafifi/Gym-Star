@@ -1,6 +1,13 @@
 const User = require("../model/users.model");
 const util = require("../util/utility");
 const bcrypt = require("bcryptjs");
+const jwt = require("../util/jwt.util");
+const Logger = require("../services/logger");
+
+//----------------------------------------------------------------
+// add object from logger service methods and the filename
+//----------------------------------------------------------------
+const logger = new Logger("UserController");
 
 // ----------------------------------------------------------------
 //                        CRUD Operations
@@ -13,10 +20,10 @@ const bcrypt = require("bcryptjs");
 exports.addNewUser = async (req, res) => {
   try {
     // get the latest id of the user from the users collection and increment it by one to create a unique id for the new user
-    let lastIdUser = await User.findOne().sort({ id: "desc" }).exec();
-    if (!lastIdUser) lastIdUser = 0;
-    else lastIdUser = lastIdUser.id + 1;
-    req.body.id = lastIdUser;
+    let lastIdUser = await User.findOne().sort({ userId: "desc" }).exec();
+    if (!lastIdUser) lastIdUser = 1;
+    else lastIdUser = lastIdUser.userId + 1;
+    req.body.userId = lastIdUser;
 
     // encrypt password and update request body with encrypted password
     const salt = await bcrypt.genSalt(10);
@@ -24,11 +31,11 @@ exports.addNewUser = async (req, res) => {
     req.body.password = hashedPassword;
 
     let data = {
-      id: req.body.id,
+      userId: req.body.userId,
       fname: req.body.fname,
       lname: req.body.lname,
       userName: req.body.userName,
-      email: req.body.Email,
+      email: req.body.email,
       password: req.body.password,
       gender: req.body.gender,
       userDisabled: false,
@@ -36,6 +43,7 @@ exports.addNewUser = async (req, res) => {
       createdBy: req.body.userName,
       createdOn: util.dateFormat(),
       //role
+      role : req.body.role ? req.body.role : 'trainee'
     };
     // console.log(data);
 
@@ -55,10 +63,23 @@ exports.addNewUser = async (req, res) => {
 
     let dataUser = await newUser.save();
 
+     // generate the token for authentication
+     let token = jwt.generateToken(
+      dataUser.userId,
+      dataUser.userName,
+      dataUser.role
+    );
+    //add logger
+
+    logger.info(
+      `user : ${newUser.userName} has been added successfully!`,
+      dataUser
+    );
     return res.status(201).send({
       status: true,
       message: `user : ${newUser.userName} has been added successfully!`,
       results: dataUser,
+      token: token,
     });
   } catch (err) {
     console.log("Error at new  user creation", err.message);
