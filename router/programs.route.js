@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const programsController = require("../controller/programs.controller");
 const upload = require("../util/uploadImg");
+const authMW = require("../middleware/authMWToken");
 
 router.get("/", (req, res) => {
   return res.status(200).json({ message: "Welcome to the Gym Star" });
@@ -15,7 +16,11 @@ router.post(
 );
 
 // Get all programs
-router.get("/programs", programsController.getAllPrograms);
+router.get(
+  "/programs",
+  authMW.authenticateUser, // Verify if the user already exists in the database
+  programsController.getAllPrograms
+);
 
 // Get specific program by id
 // router.param("id", programsController.loadProgramById);

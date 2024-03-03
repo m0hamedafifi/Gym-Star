@@ -2,7 +2,6 @@ const Program = require("../model/programs.model");
 
 const cloudinary = require("cloudinary").v2;
 
-
 // Log the configuration
 // console.log(cloudinary.config());
 
@@ -33,7 +32,7 @@ exports.addNewProgram = async (req, res) => {
       const uploadedImages = await Promise.all(uploadPromises);
 
       // Add the array of uploaded image public IDs to req.body.imgUrls
-      req.body.imgUrls = uploadedImages//.map((image) => ({ path: image }));
+      req.body.imgUrls = uploadedImages; //.map((image) => ({ path: image }));
     } else {
       console.log("No image uploaded");
       return res
@@ -188,6 +187,7 @@ const uploadImage = async (imagePath) => {
   // Use the uploaded file's name as the asset's public ID and
   // allow overwriting the asset with new versions
   const options = {
+   
     folder: "/ImagesGymStar/programs",
     use_filename: true,
     unique_filename: false,
@@ -197,6 +197,7 @@ const uploadImage = async (imagePath) => {
   try {
     // Upload the image
     const result = await cloudinary.uploader.upload(imagePath, options);
+    // console.log(result);
     return result.public_id + "." + result.format;
   } catch (error) {
     console.error(error);
