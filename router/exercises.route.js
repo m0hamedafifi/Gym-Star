@@ -20,4 +20,8 @@ router.get(
   exercisesController.getAllExercisesByProgramId
 );
 
+router.get (
+  "/home",
+  authMW.authenticateUserHomePage, // Verify if the user
+)
   module.exports = router

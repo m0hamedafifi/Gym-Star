@@ -13,12 +13,10 @@ module.exports.authenticateUser = (req, res, next) => {
   let token = req.headers["x-auth-token"] || req.body.token;
   if (!token) {
     logger.error(`No authentication token provided`);
-    return res
-      .status(401)
-      .send({
-        status: false,
-        message: "...Please login or registration to get access...!",
-      });
+    return res.status(401).send({
+      status: false,
+      message: "...Please login or registration to get access...!",
+    });
   }
   try {
     let userData = jwt.VerifyTokenUser(token);
@@ -35,6 +33,37 @@ module.exports.authenticateUser = (req, res, next) => {
 
     // console.log(req.body);
     next();
+  } catch (err) {
+    // console.error(`Error verifying token : ${err}`);
+    logger.error(`Error verifying token : ${err.message}`);
+    return res
+      .status(500)
+      .send({ status: false, message: "Failed to authenticate token." });
+  }
+};
+
+module.exports.authenticateUserHomePage = (req, res) => {
+  let token = req.headers["x-auth-token"] || req.body.token;
+  if (!token) {
+    logger.error(`No authentication token provided`);
+    return res.status(401).send({
+      status: false,
+      message: "...Please login or registration to get access...!",
+    });
+  }
+  try {
+    let userData = jwt.VerifyTokenUser(token);
+    // console.log("User Data", userData);
+    if (!userData) {
+      logger.error("Authentication token is invalid!");
+      return res
+        .status(403)
+        .send({ status: false, message: "Authentication token is invalid!" });
+    }
+
+    return res
+    .status(200)
+    .send({ status: true });
   } catch (err) {
     // console.error(`Error verifying token : ${err}`);
     logger.error(`Error verifying token : ${err.message}`);
