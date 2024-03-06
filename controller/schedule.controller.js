@@ -79,6 +79,7 @@ exports.addSchedule = async (req, res) => {
 
 exports.getScheduleByDay = async (req, res) => {
   try {
+    console.log(`Getting schedule for ${req.body}`);
     if (!req.body.day) {
       return res.status(400).json({
         status: false,
