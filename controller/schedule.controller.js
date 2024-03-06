@@ -79,8 +79,8 @@ exports.addSchedule = async (req, res) => {
 
 exports.getScheduleByDay = async (req, res) => {
   try {
-    console.log(`Getting schedule for ${req.body}`);
-    if (!req.body.day) {
+    
+    if (!req.params.day) {
       return res.status(400).json({
         status: false,
         message: "Please provide a valid Day!",
@@ -88,7 +88,7 @@ exports.getScheduleByDay = async (req, res) => {
     }
 
     let data = await Schedule.findOne(
-      { dayOfWeek: req.body.day },
+      { dayOfWeek: req.params.day },
       { _id: 0, __v: 0, id: 0, programId: 0 }
     );
 

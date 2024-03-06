@@ -11,7 +11,7 @@ router.post(
   );
 
 // get a schedule
-router.get("/schedule/",
+router.get("/schedule/:day",
 authMW.authenticateUser, // Verify if the user already exists in the database
 scheduleController.getScheduleByDay
 );
