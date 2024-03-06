@@ -87,7 +87,7 @@ exports.getScheduleByDay = async (req, res) => {
       });
     }
 
-    let data = await Schedule.findOne(
+    let data = await Schedule.find(
       { dayOfWeek: req.params.day },
       { _id: 0, __v: 0, id: 0, programId: 0 }
     );
