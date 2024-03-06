@@ -10,7 +10,7 @@ const logger = new Logger("authTokenMW");
 //----------------------------------------------------------------
 
 module.exports.authenticateUser = (req, res, next) => {
-  let token = req.headers["x-auth-token"] || req.body.token;
+  let token = req.headers["x-auth-token"];
   if (!token) {
     logger.error(`No authentication token provided`);
     return res.status(401).send({
@@ -43,7 +43,7 @@ module.exports.authenticateUser = (req, res, next) => {
 };
 
 module.exports.authenticateUserHomePage = (req, res) => {
-  let token = req.headers["x-auth-token"] || req.body.token;
+  let token = req.headers["x-auth-token"];
   if (!token) {
     logger.error(`No authentication token provided`);
     return res.status(401).send({
