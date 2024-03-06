@@ -45,7 +45,7 @@ module.exports.authenticateUser = (req, res, next) => {
 module.exports.authenticateUserHomePage = (req, res) => {
   let token = req.headers["x-auth-token"];
   if (!token) {
-    logger.error(`No authentication token provided`);
+    logger.error(`No authentication token provided at home page`);
     return res.status(401).send({
       status: false,
       message: "...Please login or registration to get access...!",
