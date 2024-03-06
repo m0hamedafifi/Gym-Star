@@ -6,6 +6,8 @@ const dbConnection = require('./db/connection');
 const programRouter = require('./router/programs.route');
 const userRouter = require('./router/users.route');
 const exerciseRouter = require('./router/exercises.route');
+const scheduleRouter = require('./router/schedule.route');
+
 // const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary').v2;
 
@@ -40,6 +42,7 @@ app.get('/', (req, res) => res.send('Welcome to the Gym Star'))
 app.use("/gym-star", programRouter);
 app.use("/gym-star", exerciseRouter);
 app.use("/gym-star", userRouter);
+app.use("/gym-star", scheduleRouter);
 
 
 // send back a 404 if no other route matches
