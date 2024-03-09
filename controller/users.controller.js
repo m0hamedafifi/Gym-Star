@@ -97,7 +97,7 @@ exports.addNewUser = async (req, res) => {
 
 exports.getAllUsersList = async function (req, res) {
   try {
-    let dataUser = await User.find({}, { _id: 0, __v: 0 }).sort({ userId: "asc" }); // get all records in the database
+    let dataUser = await User.find({}, { userId: 1,userName: 1, email: 1 }).sort({ userId: "asc" }); // get all records in the database
     if (!dataUser) {
       return res.status(404).send({
         status: false,
