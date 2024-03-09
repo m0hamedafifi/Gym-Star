@@ -15,4 +15,9 @@ router.post("/users/add", validator.validRegData, userController.addNewUser);
 // ----------------------------------------------------------------
 router.post("/users/login", LoginController.signInWithUsernamePassword);
 
+/// ----------------------------------------------------------------
+// get all users   
+// ----------------------------------------------------------------
+router.get("/users", userController.getAllUsersList);
+
 module.exports = router;

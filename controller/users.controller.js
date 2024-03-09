@@ -3,6 +3,7 @@ const util = require("../util/utility");
 const bcrypt = require("bcryptjs");
 const jwt = require("../util/jwt.util");
 const Logger = require("../services/logger");
+const { Console } = require("winston/lib/winston/transports");
 
 //----------------------------------------------------------------
 // add object from logger service methods and the filename
@@ -43,7 +44,7 @@ exports.addNewUser = async (req, res) => {
       createdBy: req.body.userName,
       createdOn: util.dateFormat(),
       //role
-      role : req.body.role ? req.body.role : 'trainee'
+      role: req.body.role ? req.body.role : "trainee",
     };
     // console.log(data);
 
@@ -63,8 +64,8 @@ exports.addNewUser = async (req, res) => {
 
     let dataUser = await newUser.save();
 
-     // generate the token for authentication
-     let token = jwt.generateToken(
+    // generate the token for authentication
+    let token = jwt.generateToken(
       dataUser.userId,
       dataUser.userName,
       dataUser.role
@@ -96,33 +97,21 @@ exports.addNewUser = async (req, res) => {
 
 exports.getAllUsersList = async function (req, res) {
   try {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 10;
-    let skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let dataUser = await User.find({}, { _id: 0, __v: 0 }).sort({ userId: "asc" }); // get all records in the database
+    if (!dataUser) {
+      return res.status(404).send({
+        status: false,
+        message: "No User found in database.",
+      });
+    }
 
-    let sortBy = req.query.sort_by ? req.query.sort_by : "id";
-    let sortType = req.query.sort_type ? req.query.sort_type : "desc";
-
-    let searchKeyword = req.query.search ? req.query.search : "";
-
-    let totalRecords = await User.countDocuments();
-
-    let records = await User.find()
-      .or([
-        { firstName: { $regex: searchKeyword } },
-        { lastName: { $regex: searchKeyword } },
-      ])
-      .sort(sortBy + ":" + sortType)
-      .skip(skip)
-      .limit(limit);
-    return res.status(200).send({
-      status: true,
-      message: "Successfully fetched the user list",
-      totalRecordCount: totalRecords,
-      recordPerPage: limit,
-      currentPageNo: Math.ceil(skip / limit) + 1,
-      totalPages: Math.ceil(totalRecords / limit),
-      results: records,
-    });
+    return res
+      .status(200)
+      .send({
+        status: true,
+        message: "Successfully retrieved all users.",
+        data: dataUser,
+      });
   } catch (err) {
     console.log("Error in getting user list..!", err.message);
     return res.status(500).json({
@@ -149,7 +138,7 @@ exports.getUserDetailsById = async function (req, res) {
 
     // Use findOne to find a user by ID and project only selected fields
     let record = await User.findOne(
-      { id: id }, 
+      { id: id },
       {
         fname: 1,
         lname: 1,
@@ -184,7 +173,6 @@ exports.getUserDetailsById = async function (req, res) {
 exports.updateUserInfo = async function (req, res) {
   const id = req.params.userId;
   try {
-    
     // Check if the request body is empty or null
     if (!req.body) {
       return res.status(400).json({
@@ -205,13 +193,16 @@ exports.updateUserInfo = async function (req, res) {
     // Remove the fields which are not provided in the request body
     for (const key of Object.keys(updateOps)) {
       if (!updateOps[key]) delete updateOps[key];
-    }   return await User.updateOne({_id: id}, {$set: updateOps}, {new:true}).then((user) => {
-      if (!user) return res.status(400).send("The user couldn\'t be updated.");
-      else return res.status(200).send(user);
-    }).catch((err) => {
-      console.log(err);
-      return res.status(500).send("Error updating user");
-    })
+    }
+    return await User.updateOne({ _id: id }, { $set: updateOps }, { new: true })
+      .then((user) => {
+        if (!user) return res.status(400).send("The user couldn't be updated.");
+        else return res.status(200).send(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send("Error updating user");
+      });
 
     // Send back a success response along with the updated user info
     return res.status(200).json({
@@ -226,5 +217,3 @@ exports.updateUserInfo = async function (req, res) {
       .json({ status: false, message: "Internal Server Error..." });
   }
 };
-
-
